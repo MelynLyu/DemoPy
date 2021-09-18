@@ -8,10 +8,10 @@ int func1(long long n) {
     }
 
     if(n % 2 == 0) {
-        return func(n/2);
+        return func1(n/2);
     }
     else{
-        return 1 + func((n-1)/2);
+        return 1 + func1((n-1)/2);
     }
 }
 
