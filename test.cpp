@@ -2,61 +2,32 @@
 
 using namespace std;
 
-int GCD(int a, int b) {
-    return b ? GCD(b, a % b) : a;
-}
-
-int ans = 0;
-
-void recur(vector<int>& nums, int pos, int c, int p, set<vector<int>>& res, vector<int>& path) {
-    if(c == p) {
-        if(!res.count(path)) {
-            res.emplace(path);
-            ++ans;
-        }
-        return;
-    }
-    if(c > p) {
-        return;
-    }
-    if(pos >= nums.size()) {
-        return;
-    }
-       
-    
-    int sumC = nums[pos] * c + p;
-    int sumP = nums[pos] * p;
-    int gcd = GCD(sumC, sumP);
-    sumC /= gcd;
-    sumP /= gcd;
-    path.emplace_back(nums[pos]);
-    recur(nums, pos+1, sumC, sumP, res, path);
-    path.pop_back();
-
-    recur(nums, pos+1, c, p, res, path); 
+bool compare(vector<int>& time1, vector<int>& time2) {
+    return time1[1] < time2[1];
 }
 
 int main(void) {
     int n;
     cin >> n;
 
-    
-    vector<int> nums(n);
+    if(n == 0) {
+        cout << 0 << endl;
+        return 0;
+    }
+
+    vector<vector<int>> times(n, vector<int>(2));
     for(int i = 0; i < n; ++i) {
-        cin >> nums[i];
+        cin >> times[i][0] >> times[i][1];
     }
-    sort(nums.begin(), nums.end());
 
-    vector<int> path;
-    set<vector<int>> res;
-    recur(nums, 0, 0, 1, res, path);
-
-    if(ans > 0) {
-        cout << ans << endl;
+    sort(times.begin(), times.end(), compare);
+    int ans = 1, right = times[0][1];
+    for(int i = 1; i < n; ++i) {
+        if(times[i][0] > right) {
+            ++ans;
+            right = times[i][1];
+        }
     }
-    else {
-        cout << "No solution!" << endl;
-    }
-    
+    cout << ans << endl;
     return 0;
 }
